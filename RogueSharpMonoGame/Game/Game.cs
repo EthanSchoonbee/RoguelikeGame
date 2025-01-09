@@ -1,4 +1,5 @@
 ﻿using Game.core;
+using Game.systems;
 using RLNET;
 
 namespace Game
@@ -41,6 +42,9 @@ namespace Game
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
+        // DungeonMap to generate and render
+        public static DungeonMap DungeonMap { get; private set; }
+
         static void Main(string[] args)
         {
             // exact name of bitmap font file
@@ -58,6 +62,11 @@ namespace Game
             _statConsole = new RLConsole( _statWidth, _statHeight );
             _inventoryConsole = new RLConsole( _inventoryWidth, _inventoryHeight );
 
+            // initialise a MapGenerator
+            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight );
+
+            // use the MapGenerator to create a DungeonMap
+            DungeonMap = mapGenerator.CreateMap();
 
             // set up a handler for RLNET's Update event
             _rootConsole.Update += OnRootConsoleUpdate;
@@ -99,6 +108,9 @@ namespace Game
                 _rootConsole , 0, _screenHeight - _messageHeight );
             RLConsole.Blit( _inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight,
                 _rootConsole , 0, 0 );
+
+            // draw the generated DungeonMap to the map sub-console
+            DungeonMap.Draw( _mapConsole );
 
             // tell RLNET to draw the console that we set
             _rootConsole.Draw();
