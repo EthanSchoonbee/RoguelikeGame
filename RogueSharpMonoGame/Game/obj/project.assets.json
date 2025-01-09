@@ -1,0 +1,303 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.8": {
+      "OpenTK/1.1.1589.5942": {
+        "type": "package",
+        "compile": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        },
+        "runtime": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        }
+      },
+      "RLNET/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "OpenTK": "1.1.1589.5942"
+        },
+        "compile": {
+          "lib/RLNET.dll": {}
+        },
+        "runtime": {
+          "lib/RLNET.dll": {}
+        }
+      },
+      "RogueSharp/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/RogueSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40/RogueSharp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win": {
+      "OpenTK/1.1.1589.5942": {
+        "type": "package",
+        "compile": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        },
+        "runtime": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        }
+      },
+      "RLNET/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "OpenTK": "1.1.1589.5942"
+        },
+        "compile": {
+          "lib/RLNET.dll": {}
+        },
+        "runtime": {
+          "lib/RLNET.dll": {}
+        }
+      },
+      "RogueSharp/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/RogueSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40/RogueSharp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win-arm64": {
+      "OpenTK/1.1.1589.5942": {
+        "type": "package",
+        "compile": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        },
+        "runtime": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        }
+      },
+      "RLNET/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "OpenTK": "1.1.1589.5942"
+        },
+        "compile": {
+          "lib/RLNET.dll": {}
+        },
+        "runtime": {
+          "lib/RLNET.dll": {}
+        }
+      },
+      "RogueSharp/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/RogueSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40/RogueSharp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win-x64": {
+      "OpenTK/1.1.1589.5942": {
+        "type": "package",
+        "compile": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        },
+        "runtime": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        }
+      },
+      "RLNET/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "OpenTK": "1.1.1589.5942"
+        },
+        "compile": {
+          "lib/RLNET.dll": {}
+        },
+        "runtime": {
+          "lib/RLNET.dll": {}
+        }
+      },
+      "RogueSharp/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/RogueSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40/RogueSharp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win-x86": {
+      "OpenTK/1.1.1589.5942": {
+        "type": "package",
+        "compile": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        },
+        "runtime": {
+          "lib/NET40/OpenTK.dll": {
+            "related": ".dll.config;.xml"
+          }
+        }
+      },
+      "RLNET/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "OpenTK": "1.1.1589.5942"
+        },
+        "compile": {
+          "lib/RLNET.dll": {}
+        },
+        "runtime": {
+          "lib/RLNET.dll": {}
+        }
+      },
+      "RogueSharp/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/RogueSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40/RogueSharp.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "OpenTK/1.1.1589.5942": {
+      "sha512": "kDJrP4a/bqlyFtMiy+dn9stzAoHxLQ2RvEwp6dcpixefdN1CVcQb9gPjpsEvpUXau+IoSyVsUHxNGDOs7bGUSA==",
+      "type": "package",
+      "path": "opentk/1.1.1589.5942",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/NET40/OpenTK.dll",
+        "lib/NET40/OpenTK.dll.config",
+        "lib/NET40/OpenTK.xml",
+        "opentk.1.1.1589.5942.nupkg.sha512",
+        "opentk.nuspec"
+      ]
+    },
+    "RLNET/1.0.6": {
+      "sha512": "uB0av8QFwSdfQrFCN7a3tk6YDwlQU0SPt3Oh7T7FUzoRwrfRSIF/albeHrlF5ZXN1XsHiUkOz7o9FIZg0plsCg==",
+      "type": "package",
+      "path": "rlnet/1.0.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/RLNET.dll",
+        "lib/ascii_8x8.png",
+        "rlnet.1.0.6.nupkg.sha512",
+        "rlnet.nuspec"
+      ]
+    },
+    "RogueSharp/4.2.0": {
+      "sha512": "z4Jc2jpu3lm2CzjQpTxDz8urHZc5CjIdTEeD2A0mUTrRdUBmneXjpbzk2CCzh5VSqgP/5r3kEaQczUgANOAmSA==",
+      "type": "package",
+      "path": "roguesharp/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/RogueSharp.dll",
+        "lib/netstandard1.0/RogueSharp.dll",
+        "roguesharp.4.2.0.nupkg.sha512",
+        "roguesharp.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.8": [
+      "RLNET >= 1.0.6",
+      "RogueSharp >= 4.2.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\schoo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\schoo\\PersonalProjects\\roguelike\\RoguelikeGame\\RogueSharpMonoGame\\Game\\Game.csproj",
+      "projectName": "Game",
+      "projectPath": "C:\\Users\\schoo\\PersonalProjects\\roguelike\\RoguelikeGame\\RogueSharpMonoGame\\Game\\Game.csproj",
+      "packagesPath": "C:\\Users\\schoo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\schoo\\PersonalProjects\\roguelike\\RoguelikeGame\\RogueSharpMonoGame\\Game\\obj\\",
+      "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "UsingMicrosoftNETSdk": false,
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\schoo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net48"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net48": {
+          "projectReferences": {}
+        }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net48": {
+        "dependencies": {
+          "RLNET": {
+            "target": "Package",
+            "version": "[1.0.6, )"
+          },
+          "RogueSharp": {
+            "target": "Package",
+            "version": "[4.2.0, )"
+          }
+        }
+      }
+    },
+    "runtimes": {
+      "win": {
+        "#import": []
+      },
+      "win-arm64": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  }
+}

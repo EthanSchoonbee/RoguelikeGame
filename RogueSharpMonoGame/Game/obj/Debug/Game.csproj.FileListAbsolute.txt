@@ -1,0 +1,12 @@
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\assets\terminal8x8.png
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\Game.exe.config
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\Game.exe
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\Game.pdb
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\OpenTK.dll
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\RLNET.dll
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\bin\Debug\RogueSharp.dll
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\obj\Debug\Game.csproj.AssemblyReference.cache
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\obj\Debug\Game.csproj.CoreCompileInputs.cache
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\obj\Debug\Game.csproj.Up2Date
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\obj\Debug\Game.exe
+C:\Users\schoo\PersonalProjects\roguelike\RoguelikeGame\RogueSharpMonoGame\Game\obj\Debug\Game.pdb

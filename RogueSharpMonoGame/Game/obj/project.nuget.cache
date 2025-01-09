@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "6oQYK03Tdxs=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\schoo\\PersonalProjects\\roguelike\\RoguelikeGame\\RogueSharpMonoGame\\Game\\Game.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\schoo\\.nuget\\packages\\opentk\\1.1.1589.5942\\opentk.1.1.1589.5942.nupkg.sha512",
+    "C:\\Users\\schoo\\.nuget\\packages\\rlnet\\1.0.6\\rlnet.1.0.6.nupkg.sha512",
+    "C:\\Users\\schoo\\.nuget\\packages\\roguesharp\\4.2.0\\roguesharp.4.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}
