@@ -1,6 +1,6 @@
 ﻿using RLNET;
 
-namespace RogueSharpV3
+namespace Game
 {
     public static class Game
     {
@@ -34,7 +34,7 @@ namespace RogueSharpV3
         private static RLConsole _statConsole;
 
         //inventory :
-        // the inventory sub-console diplays player's equipment, abilities, and items
+        // the inventory sub-console displays player's equipment, abilities, and items
         // above the map
         private static readonly int _inventoryWidth = 80;
         private static readonly int _inventoryHeight = 11;
@@ -51,7 +51,7 @@ namespace RogueSharpV3
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
                 8, 8, 1f, consoleTitle);
 
-            // initalize the sub consoles that will Blit to the root console
+            // initialize the sub consoles that will Blit to the root console
             _mapConsole = new RLConsole( _mapWidth, _mapHeight );
             _messageConsole = new RLConsole( _messageWidth, _messageHeight );
             _statConsole = new RLConsole( _statWidth, _statHeight );
@@ -72,15 +72,33 @@ namespace RogueSharpV3
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
             // set background color and text for each console
+            // this is to verify positioning
             _mapConsole.SetBackColor(0, 0, _mapWidth, _mapHeight, RLColor.Black );
             _mapConsole.Print( 1, 1, "Map", RLColor.White );
-            
 
+            _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray );
+            _messageConsole.Print( 1, 1, "Message", RLColor.White );
+
+            _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Brown );
+            _statConsole.Print( 1, 1, "Stat", RLColor.White );
+
+            _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, RLColor.Cyan );
+            _inventoryConsole.Print( 1, 1, "Inventory", RLColor.White );
         }
 
         // event handler for RLNET's Render event
         private static void OnRootConsoleRender ( object sender, UpdateEventArgs e)
         {
+            // Blit the sub-consoles to the root console in the correct locations
+            RLConsole.Blit( _mapConsole, 0, 0, _mapWidth, _mapHeight,
+                _rootConsole , 0, _inventoryHeight );
+            RLConsole.Blit( _statConsole, 0, 0, _statWidth, _statHeight,
+                _rootConsole , _mapWidth, 0 );
+            RLConsole.Blit( _messageConsole, 0, 0, _messageWidth, _messageHeight,
+                _rootConsole , 0, _screenHeight - _messageHeight );
+            RLConsole.Blit( _inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight,
+                _rootConsole , 0, 0 );
+
             // tell RLNET to draw the console that we set
             _rootConsole.Draw();
         }
