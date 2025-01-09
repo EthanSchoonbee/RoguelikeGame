@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RLNET;
 using RogueSharp;
 
@@ -7,6 +8,15 @@ namespace Game.core
     // custom DungeonMap class which extends the base RogueSharp Map class
     public class DungeonMap : Map
     {
+        // list of room rectangles
+        public List<Rectangle> Rooms;
+
+        public DungeonMap()
+        {
+            //Initialize the list of rooms when we create a new DungeonMap
+            Rooms = new List<Rectangle>();
+        }
+
         // Draw method to eb called each time the map is updated
         // renders all the symbols/colors for each cell to the map sub-console
         public void Draw(RLConsole mapConsole)
@@ -110,6 +120,17 @@ namespace Game.core
         {
             Cell cell = (Cell)GetCell(x, y);
             SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
+        }
+
+        // method to update the Players position and FOV on the DungeonMap
+        public void AddPlayer(Player player)
+        {
+            // get the player
+            Game.Player = player;
+            // set the player position to not walkable
+            SetIsWalkable(player.X, player.Y, false );
+            // update the DungeonMap Player's FOV
+            UpdatePlayerFieldOfView();
         }
     }
 }

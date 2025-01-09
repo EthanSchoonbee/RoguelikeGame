@@ -1,13 +1,15 @@
-﻿using Game.core;
+﻿using System;
+using Game.core;
 using Game.systems;
 using RLNET;
+using RogueSharp.Random;
 
 namespace Game
 {
     public static class Game
     {
         // Player
-        public static Player Player { get; private set; }
+        public static Player Player { get; set; }
 
         // DungeonMap to generate and render
         public static DungeonMap DungeonMap { get; private set; }
@@ -17,6 +19,9 @@ namespace Game
 
         // CommandSystem
         private static CommandSystem CommandSystem { get; set; }
+
+        // singleton of IRandom used throughout rhe game to generate random numbers
+        public static IRandom Random { get; private set; }
 
         // the screen height and width in number of tiles
 
@@ -56,16 +61,18 @@ namespace Game
 
         static void Main(string[] args)
         {
+            // establish a seed for the random number generator from the current time
+            int seed = (int)DateTime.UtcNow.Ticks;
+            // generate a random number based on seed
+            Random = new DotNetRandom(seed);
+
             // exact name of bitmap font file
             string fontFileName = "assets/terminal8x8.png";
             // title for console window 
-            string consoleTitle = "RogueSharp V3 - Level 1";
-
-            // instantiate a Player
-            Player = new Player();
+            string consoleTitle = $"RogueSharp V3 - Level 1 - Seed {seed}";
 
             // instantiate a MapGenerator
-            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight );
+            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight, 20, 13, 7 );
 
             // use the MapGenerator to create a DungeonMap
             DungeonMap = mapGenerator.CreateMap();
