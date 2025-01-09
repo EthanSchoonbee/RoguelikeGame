@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RLNET;
 using RogueSharp;
+using RogueSharp.MapCreation;
 
 namespace Game.core
 {
@@ -11,57 +12,15 @@ namespace Game.core
         // list of room rectangles
         public List<Rectangle> Rooms;
 
+        // list of monsters
+        private readonly List<Monster> _monsters;
+
         public DungeonMap()
         {
-            //Initialize the list of rooms when we create a new DungeonMap
+            // initialize the list of monsters when we create a new DungeonMap
+            _monsters = new List<Monster>();
+            // initialize the list of rooms when we create a new DungeonMap
             Rooms = new List<Rectangle>();
-        }
-
-        // Draw method to eb called each time the map is updated
-        // renders all the symbols/colors for each cell to the map sub-console
-        public void Draw(RLConsole mapConsole)
-        {
-            mapConsole.Clear();
-            foreach (Cell cell in GetAllCells())
-            {
-                SetConsoleSymbolForCell( mapConsole, cell ); // set the cell
-            }
-        }
-
-        private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
-        {
-            // when the cell has not been explored yet, dont draw anything
-            if (!cell.IsExplored)
-            {
-                return;
-            }
-
-            // if cell is currently in the FOV it should be drawn in lighter colors
-            if (IsInFov(cell.X, cell.Y))
-            {
-                // choose the symbol to draw based on of the cell is walkable or not
-                // "." for floor and "#" for wall
-                if (cell.IsWalkable) // is a floor in FOV
-                {
-                    console.Set(cell.X, cell.Y, Colors.FloorFov, Colors.FloorBackgroundFov, '.');
-                }
-                else // is a wall in FOV
-                {
-                    console.Set(cell.X, cell.Y, Colors.WallFov, Colors.WallBackgroundFov, '#');
-                }
-            }
-            // a cell is outside the FOV draw it in darker colors
-            else
-            {
-                if (cell.IsWalkable) // is a floor outside FOV
-                {
-                    console.Set(cell.X, cell.Y, Colors.Floor, Colors.FloorBackground, '.');
-                }
-                else // is a wall outside FOV
-                {
-                    console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');
-                }
-            }
         }
 
         // method is called any time the player is moved in order to update their FOV
@@ -115,13 +74,6 @@ namespace Game.core
             return false;
         }
 
-        // helper method for setting the IsWalkable property on the cell
-        public void SetIsWalkable(int x, int y, bool isWalkable)
-        {
-            Cell cell = (Cell)GetCell(x, y);
-            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
-        }
-
         // method to update the Players position and FOV on the DungeonMap
         public void AddPlayer(Player player)
         {
@@ -131,6 +83,112 @@ namespace Game.core
             SetIsWalkable(player.X, player.Y, false );
             // update the DungeonMap Player's FOV
             UpdatePlayerFieldOfView();
+        }
+
+        // method to add monsters to the map
+        public void AddMonster(Monster monster)
+        {
+            _monsters.Add(monster);
+            // after adding a monster to the map ensure the cell is not walkable
+            SetIsWalkable(monster.X, monster.Y, false );
+        }
+
+        // helper method for setting the IsWalkable property on the cell
+        public void SetIsWalkable(int x, int y, bool isWalkable)
+        {
+            Cell cell = (Cell)GetCell(x, y);
+            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
+        }
+
+        // look for a random location in a room tha is walkable
+        public Point? GetRandomWalkableLocationInRoom( Rectangle room )
+        {
+            if ( DoesRoomHaveWalkableSpace( room ) )
+            {
+                for ( int i = 0; i < 100; i++ )
+                {
+                    int x = Game.Random.Next( 1, room.Width - 2 ) + room.X;
+                    int y = Game.Random.Next( 1, room.Height - 2 ) + room.Y;
+                    if ( IsWalkable( x, y ) )
+                    {
+                        return new Point( x, y );
+                    }
+                }
+            }
+
+            // If we didn't find a walkable location in the room return null
+            return null;
+        }
+
+        // iterate through each Cell in a room and return true if any are walkable
+        public bool DoesRoomHaveWalkableSpace(Rectangle room)
+        {
+            for (int x = 1; x <= room.Width - 2; x++)
+            {
+                for (int y = 1; y <= room.Height - 2; y++)
+                {
+                    if (IsWalkable(x + room.X, y + room.Y))
+                    {
+                        // there is at lease one walkable cell in the room
+                        return true;
+                    }
+                }
+            }
+            // there are no walkable cells in the room
+            return false;
+        }
+
+        // Draw method to eb called each time the map is updated
+        // renders all the symbols/colors for each cell to the map sub-console
+        public void Draw(RLConsole mapConsole)
+        {
+            // draw each cell onto the map
+            foreach (Cell cell in GetAllCells())
+            {
+                SetConsoleSymbolForCell( mapConsole, cell ); // set the cell
+            }
+
+            // draw each monster onto the map
+            foreach (Monster monster in _monsters)
+            {
+                monster.Draw(mapConsole, this);
+            }
+        }
+
+        private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
+        {
+            // when the cell has not been explored yet, dont draw anything
+            if (!cell.IsExplored)
+            {
+                return;
+            }
+
+            // if cell is currently in the FOV it should be drawn in lighter colors
+            if (IsInFov(cell.X, cell.Y))
+            {
+                // choose the symbol to draw based on of the cell is walkable or not
+                // "." for floor and "#" for wall
+                if (cell.IsWalkable) // is a floor in FOV
+                {
+                    console.Set(cell.X, cell.Y, Colors.FloorFov, Colors.FloorBackgroundFov, '.');
+                }
+                else // is a wall in FOV
+                {
+                    console.Set(cell.X, cell.Y, Colors.WallFov, Colors.WallBackgroundFov, '#');
+                }
+            }
+            // a cell is outside the FOV draw it in darker colors
+            else
+            {
+                if (cell.IsWalkable) // is a floor outside FOV
+                {
+                    console.Set(cell.X, cell.Y, Colors.Floor, Colors.FloorBackground, '.');
+                }
+                else // is a wall outside FOV
+                {
+                    console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');
+                }
+            }
         }
     }
 }

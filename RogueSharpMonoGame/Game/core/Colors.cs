@@ -25,5 +25,8 @@ namespace Game.core
 
         // specific player color
         public static RLColor Player = Palette.DbLight;
+
+        // specific enemy colors
+        public static RLColor KoboldColor = Palette.DbBrightWood;
     }
 }

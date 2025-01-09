@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Game.core;
+using Game.monsters;
 using RogueSharp;
+using RogueSharp.DiceNotation;
 
 namespace Game.systems
 {
@@ -58,15 +60,6 @@ namespace Game.systems
                }
             }
 
-            // iterate through each room that we wanted placed and call CreateRoom to make it
-            foreach ( Rectangle room in _map.Rooms)
-            {
-                CreateRoom(room);
-            }
-
-            // Place the player after the first room is generated for the map
-            PlacePlayer();
-
             // iterate through the list of rooms generated
             // dont do anything with the first room, start at index 1
             for (int r = 1; r < _map.Rooms.Count; r++)
@@ -92,6 +85,18 @@ namespace Game.systems
                 }
             }
 
+            // iterate through each room that we wanted placed and call CreateRoom to make it
+            foreach ( Rectangle room in _map.Rooms)
+            {
+                CreateRoom(room);
+            }
+
+            // Place the player after the first room is generated for the map
+            PlacePlayer();
+
+            // Place the monsters after all rooms are generated for the map
+            PlaceMonsters();
+
             // return the generated map
             return _map;
         }
@@ -105,6 +110,24 @@ namespace Game.systems
                 {
                     _map.SetCellProperties(x,y,true,true,false);
                 }
+            }
+        }
+
+        // carve tunnel out of the map parallel to the x-axis
+        private void CreateHorizontalTunnel(int xStart, int xEnd, int yPosition)
+        {
+            for (int x = Math.Min(xStart, xEnd); x <= Math.Max(xStart, xEnd); x++)
+            {
+                _map.SetCellProperties(x,yPosition,true,true);
+            }
+        }
+
+        // carve tunnel out of the map parallel to the y-axis
+        private void CreateVerticalTunnel(int yStart, int yEnd, int xPosition)
+        {
+            for (int y = Math.Min(yStart, yEnd); y <= Math.Max(yStart, yEnd); y++)
+            {
+                _map.SetCellProperties(xPosition,y,true,true);
             }
         }
 
@@ -128,21 +151,31 @@ namespace Game.systems
             _map.AddPlayer(player);
         }
 
-        // carve tunnel out of the map parallel to the x-axis
-        private void CreateHorizontalTunnel(int xStart, int xEnd, int yPosition)
+        private void PlaceMonsters()
         {
-            for (int x = Math.Min(xStart, xEnd); x <= Math.Max(xStart, xEnd); x++)
+            // place monsters in each room
+            foreach (var room in _map.Rooms)
             {
-                _map.SetCellProperties(x,yPosition,true,true);
-            }
-        }
-
-        // carve tunnel out of the map parallel to the y-axis
-        private void CreateVerticalTunnel(int yStart, int yEnd, int xPosition)
-        {
-            for (int y = Math.Min(yStart, yEnd); y <= Math.Max(yStart, yEnd); y++)
-            {
-                _map.SetCellProperties(xPosition,y,true,true);
+                // each room has a 60% chance of having monsters
+                if (Dice.Roll("1D10") < 7)
+                {
+                    // generate between 1 and 4 monsters
+                    var numberOfMonsters = Dice.Roll("1D4");
+                    for (int i = 0; i < numberOfMonsters; i++)
+                    {
+                        // find a random walkable location in the room to place the monster
+                        Point? randomRoomLocation = _map.GetRandomWalkableLocationInRoom(room);
+                        // if the room doesnt have space foe a monster, skip creating the monster
+                        if (randomRoomLocation != null)
+                        {
+                            //temorarily hard code thsi monster to be created at level 1
+                            var monster = Kobold.Create(1);
+                            monster.X = randomRoomLocation.Value.X;
+                            monster.Y = randomRoomLocation.Value.Y;
+                            _map.AddMonster(monster);
+                        }
+                    }
+                }
             }
         }
     }
