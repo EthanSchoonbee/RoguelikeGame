@@ -103,7 +103,7 @@ namespace Game.systems
             {
                 for (int y = room.Top + 1; y < room.Bottom; y++)
                 {
-                    _map.SetCellProperties(x,y,true,true,true);
+                    _map.SetCellProperties(x,y,true,true,false);
                 }
             }
         }
