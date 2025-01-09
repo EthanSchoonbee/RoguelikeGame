@@ -19,5 +19,8 @@ namespace Game.core
 
         // specific text color
         public static RLColor TextHeading = Palette.DbLight;
+
+        // specific player color
+        public static RLColor Player = Palette.DbLight;
     }
 }
