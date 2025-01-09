@@ -73,5 +73,43 @@ namespace Game.core
                 }
             }
         }
+
+        // return true when able to place the Actor on the cell or false when not
+        public bool SetActorPosition(Actor actor, int x, int y)
+        {
+            // only allow Actors to be places in walkable cells
+            if (GetCell(x, y).IsWalkable)
+            {
+                // the cell the Actor was previously on is now walkable
+                SetIsWalkable( actor.X, actor.Y, true );
+
+                // update the actor's position
+                actor.X = x;
+                actor.Y = y;
+
+                // the new cell the Actor is on is now not walkable
+                SetIsWalkable(actor.X, actor.Y, false );
+
+                // update the FOV if we just repositioned the Player
+                if (actor is Player) // check if the actor is a Player
+                {
+                    // update the DungeonMap with new FOV
+                    UpdatePlayerFieldOfView();
+                }
+
+                // able to place Actor on cell (could be moved)
+                return true;
+            }
+
+            // unable to place Actor on cell (could not be moved)
+            return false;
+        }
+
+        // helper method for setting the IsWalkable property on the cell
+        public void SetIsWalkable(int x, int y, bool isWalkable)
+        {
+            Cell cell = (Cell)GetCell(x, y);
+            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
+        }
     }
 }

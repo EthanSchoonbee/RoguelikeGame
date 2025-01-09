@@ -6,6 +6,18 @@ namespace Game
 {
     public static class Game
     {
+        // Player
+        public static Player Player { get; private set; }
+
+        // DungeonMap to generate and render
+        public static DungeonMap DungeonMap { get; private set; }
+
+        // check if a rerender is needs (initialise to true on run)
+        private static bool _renderRequired = true;
+
+        // CommandSystem
+        private static CommandSystem CommandSystem { get; set; }
+
         // the screen height and width in number of tiles
 
         // screen :
@@ -42,18 +54,27 @@ namespace Game
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
-        // the Player
-        public static Player Player { get; private set; }
-
-        // DungeonMap to generate and render
-        public static DungeonMap DungeonMap { get; private set; }
-
         static void Main(string[] args)
         {
             // exact name of bitmap font file
             string fontFileName = "assets/terminal8x8.png";
             // title for console window 
             string consoleTitle = "RogueSharp V3 - Level 1";
+
+            // instantiate a Player
+            Player = new Player();
+
+            // instantiate a MapGenerator
+            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight );
+
+            // use the MapGenerator to create a DungeonMap
+            DungeonMap = mapGenerator.CreateMap();
+
+            // update the FOV of the map based on Player awareness
+            DungeonMap.UpdatePlayerFieldOfView();
+
+            // instantiate a CommandSystem
+            CommandSystem = new CommandSystem();
 
             // tell RLNET to use the bitmap font and that each tile is 8x8 pixels
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
@@ -64,18 +85,6 @@ namespace Game
             _messageConsole = new RLConsole( _messageWidth, _messageHeight );
             _statConsole = new RLConsole( _statWidth, _statHeight );
             _inventoryConsole = new RLConsole( _inventoryWidth, _inventoryHeight );
-
-            // initialise a Player
-            Player = new Player();
-
-            // initialise a MapGenerator
-            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight );
-
-            // use the MapGenerator to create a DungeonMap
-            DungeonMap = mapGenerator.CreateMap();
-
-            // update the FOV of the map based on Player awareness
-            DungeonMap.UpdatePlayerFieldOfView();
 
             // set background color and text for each console to verify positioning
             _messageConsole.SetBackColor( 0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater );
@@ -100,30 +109,73 @@ namespace Game
         // event handler for RLNET's Update event
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
-            //
+            // flag for Player movement
+            bool didPlayerAct = false;
+
+            // capture key presses within the root console
+            RLKeyPress keyPress = _rootConsole.Keyboard.GetKeyPress();
+
+            // check is the key press is null and if not determine if it correlates to an Action
+            if (keyPress != null)
+            {
+                if (keyPress.Key == RLKey.Up)
+                {
+                    // determine if the player was able to move
+                    didPlayerAct = CommandSystem.MovePlayer(Direction.Up);
+                }
+                else if (keyPress.Key == RLKey.Down)
+                {
+                    didPlayerAct = CommandSystem.MovePlayer(Direction.Down);
+                }
+                else if (keyPress.Key == RLKey.Left)
+                {
+                    didPlayerAct = CommandSystem.MovePlayer(Direction.Left);
+                }
+                else if (keyPress.Key == RLKey.Right)
+                {
+                    didPlayerAct = CommandSystem.MovePlayer(Direction.Right);
+                }
+                // exit the game
+                else if (keyPress.Key == RLKey.Escape)
+                {
+                    _rootConsole.Close();
+                }
+            }
+
+            if (didPlayerAct)
+            {
+                _renderRequired = true;
+            }
         }
 
         // event handler for RLNET's Render event
         private static void OnRootConsoleRender ( object sender, UpdateEventArgs e)
         {
-            // Blit the sub-consoles to the root console in the correct locations
-            RLConsole.Blit( _mapConsole, 0, 0, _mapWidth, _mapHeight,
-                _rootConsole , 0, _inventoryHeight );
-            RLConsole.Blit( _statConsole, 0, 0, _statWidth, _statHeight,
-                _rootConsole , _mapWidth, 0 );
-            RLConsole.Blit( _messageConsole, 0, 0, _messageWidth, _messageHeight,
-                _rootConsole , 0, _screenHeight - _messageHeight );
-            RLConsole.Blit( _inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight,
-                _rootConsole , 0, 0 );
+            // do not render all consoles if nothing has changed
+            if (_renderRequired)
+            {
+                // draw the generated DungeonMap to the map sub-console
+                DungeonMap.Draw( _mapConsole );
 
-            // draw the generated DungeonMap to the map sub-console
-            DungeonMap.Draw( _mapConsole );
+                // draw the Player and their FOV onto the map
+                Player.Draw( _mapConsole, DungeonMap );
 
-            // draw the Player and their FOV onto the map
-            Player.Draw( _mapConsole, DungeonMap );
+                // Blit the sub-consoles to the root console in the correct locations
+                RLConsole.Blit( _mapConsole, 0, 0, _mapWidth, _mapHeight,
+                    _rootConsole , 0, _inventoryHeight );
+                RLConsole.Blit( _statConsole, 0, 0, _statWidth, _statHeight,
+                    _rootConsole , _mapWidth, 0 );
+                RLConsole.Blit( _messageConsole, 0, 0, _messageWidth, _messageHeight,
+                    _rootConsole , 0, _screenHeight - _messageHeight );
+                RLConsole.Blit( _inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight,
+                    _rootConsole , 0, 0 );
 
-            // tell RLNET to draw the console that we set
-            _rootConsole.Draw();
+                // tell RLNET to draw the console that we set
+                _rootConsole.Draw();
+
+                // reset the render flag
+                _renderRequired = false;
+            }
         }
     }
 }
