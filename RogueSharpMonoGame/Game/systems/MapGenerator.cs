@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Game.core;
 using RogueSharp;
 
@@ -66,6 +67,31 @@ namespace Game.systems
             // Place the player after the first room is generated for the map
             PlacePlayer();
 
+            // iterate through the list of rooms generated
+            // dont do anything with the first room, start at index 1
+            for (int r = 1; r < _map.Rooms.Count; r++)
+            {
+                // for all remaining rooms get the center of the room and the previous room
+                // previous room
+                int previousRoomCenterX = _map.Rooms[r - 1].Center.X;
+                int previousRoomCenterY = _map.Rooms[r - 1].Center.Y;
+                // current room
+                int currentRoomCenterX = _map.Rooms[r].Center.X;
+                int currentRoomCenterY = _map.Rooms[r].Center.Y;
+
+                // give a 50% chance to which "L" shaped connecting hallway to tunnel out
+                if (Game.Random.Next(1, 2) == 1)
+                {
+                    CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
+                    CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, currentRoomCenterX);
+                }
+                else
+                {
+                    CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, currentRoomCenterX);
+                    CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
+                }
+            }
+
             // return the generated map
             return _map;
         }
@@ -100,6 +126,24 @@ namespace Game.systems
 
             // call DungeonMap to add the player to the map
             _map.AddPlayer(player);
+        }
+
+        // carve tunnel out of the map parallel to the x-axis
+        private void CreateHorizontalTunnel(int xStart, int xEnd, int yPosition)
+        {
+            for (int x = Math.Min(xStart, xEnd); x <= Math.Max(xStart, xEnd); x++)
+            {
+                _map.SetCellProperties(x,yPosition,true,true);
+            }
+        }
+
+        // carve tunnel out of the map parallel to the y-axis
+        private void CreateVerticalTunnel(int yStart, int yEnd, int xPosition)
+        {
+            for (int y = Math.Min(yStart, yEnd); y <= Math.Max(yStart, yEnd); y++)
+            {
+                _map.SetCellProperties(xPosition,y,true,true);
+            }
         }
     }
 }
