@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="core\Colors.cs" />
-    <Compile Include="core\Swatch.cs" />
+    <Compile Include="core\Palette.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using RLNET;
+﻿using Game.core;
+using RLNET;
 
 namespace Game
 {
@@ -73,17 +74,17 @@ namespace Game
         {
             // set background color and text for each console
             // this is to verify positioning
-            _mapConsole.SetBackColor(0, 0, _mapWidth, _mapHeight, RLColor.Black );
-            _mapConsole.Print( 1, 1, "Map", RLColor.White );
+            _mapConsole.SetBackColor( 0, 0, _mapWidth, _mapHeight, Colors.FloorBackground );
+            _mapConsole.Print( 1, 1, "Map", Colors.TextHeading );
 
-            _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray );
-            _messageConsole.Print( 1, 1, "Message", RLColor.White );
+            _messageConsole.SetBackColor( 0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater );
+            _messageConsole.Print( 1, 1, "Messages", Colors.TextHeading );
 
-            _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Brown );
-            _statConsole.Print( 1, 1, "Stat", RLColor.White );
+            _statConsole.SetBackColor( 0, 0, _statWidth, _statHeight, Palette.DbOldStone );
+            _statConsole.Print( 1, 1, "Stats", Colors.TextHeading );
 
-            _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, RLColor.Cyan );
-            _inventoryConsole.Print( 1, 1, "Inventory", RLColor.White );
+            _inventoryConsole.SetBackColor( 0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood );
+            _inventoryConsole.Print( 1, 1, "Inventory", Colors.TextHeading );
         }
 
         // event handler for RLNET's Render event
