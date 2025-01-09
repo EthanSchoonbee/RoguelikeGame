@@ -8,6 +8,9 @@ namespace Game
 {
     public static class Game
     {
+        // Temporary member variable just to show our MessageLog is working
+        private static int _steps = 0;
+
         // Player
         public static Player Player { get; set; }
 
@@ -19,6 +22,9 @@ namespace Game
 
         // CommandSystem
         private static CommandSystem CommandSystem { get; set; }
+
+        // MessageLog
+        public static MessageLog MessageLog { get; private set; }
 
         // singleton of IRandom used throughout rhe game to generate random numbers
         public static IRandom Random { get; private set; }
@@ -83,6 +89,10 @@ namespace Game
             // instantiate a CommandSystem
             CommandSystem = new CommandSystem();
 
+            MessageLog = new MessageLog();
+            MessageLog.Add("The rogue arrives on level 1");
+            MessageLog.Add($"Level created with seed {seed}");
+
             // tell RLNET to use the bitmap font and that each tile is 8x8 pixels
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
                 8, 8, 1f, consoleTitle);
@@ -92,10 +102,6 @@ namespace Game
             _messageConsole = new RLConsole( _messageWidth, _messageHeight );
             _statConsole = new RLConsole( _statWidth, _statHeight );
             _inventoryConsole = new RLConsole( _inventoryWidth, _inventoryHeight );
-
-            // set background color and text for each console to verify positioning
-            _messageConsole.SetBackColor( 0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater );
-            _messageConsole.Print( 1, 1, "Messages", Colors.TextHeading );
 
             _statConsole.SetBackColor( 0, 0, _statWidth, _statHeight, Palette.DbOldStone );
             _statConsole.Print( 1, 1, "Stats", Colors.TextHeading );
@@ -151,6 +157,8 @@ namespace Game
 
             if (didPlayerAct)
             {
+                // every time the player acts increment the steps and log it
+                MessageLog.Add($"Step # {++_steps}");
                 _renderRequired = true;
             }
         }
@@ -164,8 +172,11 @@ namespace Game
                 // draw the generated DungeonMap to the map sub-console
                 DungeonMap.Draw( _mapConsole );
 
-                // draw the Player and their FOV onto the map
+                // draw the Player and their FOV onto the map sub-console
                 Player.Draw( _mapConsole, DungeonMap );
+
+                // draw the MessageLog to the message sub-console
+                MessageLog.Draw(_messageConsole);
 
                 // Blit the sub-consoles to the root console in the correct locations
                 RLConsole.Blit( _mapConsole, 0, 0, _mapWidth, _mapHeight,
