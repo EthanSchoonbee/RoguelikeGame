@@ -53,5 +53,25 @@ namespace Game.core
                 }
             }
         }
+
+        // method is called any time the player is moved in order to update their FOV
+        public void UpdatePlayerFieldOfView()
+        {
+            // initialise a references to the player object
+            Player player = Game.Player;
+
+            // compute the FOV base don the player's location and awareness
+            ComputeFov(player.X, player.Y, player.Awareness, true);
+
+            // mark all cells in the players FOV has having been explored
+            foreach (Cell cell in GetAllCells())
+            {
+                // check if the cell is in the players FOV
+                if (IsInFov(cell.X, cell.Y))
+                {
+                    SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
+                }
+            }
+        }
     }
 }

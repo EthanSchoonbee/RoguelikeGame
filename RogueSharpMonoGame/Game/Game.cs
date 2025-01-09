@@ -42,6 +42,9 @@ namespace Game
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
+        // the Player
+        public static Player Player { get; private set; }
+
         // DungeonMap to generate and render
         public static DungeonMap DungeonMap { get; private set; }
 
@@ -62,11 +65,27 @@ namespace Game
             _statConsole = new RLConsole( _statWidth, _statHeight );
             _inventoryConsole = new RLConsole( _inventoryWidth, _inventoryHeight );
 
+            // initialise a Player
+            Player = new Player();
+
             // initialise a MapGenerator
             MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight );
 
             // use the MapGenerator to create a DungeonMap
             DungeonMap = mapGenerator.CreateMap();
+
+            // update the FOV of the map based on Player awareness
+            DungeonMap.UpdatePlayerFieldOfView();
+
+            // set background color and text for each console to verify positioning
+            _messageConsole.SetBackColor( 0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater );
+            _messageConsole.Print( 1, 1, "Messages", Colors.TextHeading );
+
+            _statConsole.SetBackColor( 0, 0, _statWidth, _statHeight, Palette.DbOldStone );
+            _statConsole.Print( 1, 1, "Stats", Colors.TextHeading );
+
+            _inventoryConsole.SetBackColor( 0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood );
+            _inventoryConsole.Print( 1, 1, "Inventory", Colors.TextHeading );
 
             // set up a handler for RLNET's Update event
             _rootConsole.Update += OnRootConsoleUpdate;
@@ -81,19 +100,7 @@ namespace Game
         // event handler for RLNET's Update event
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
-            // set background color and text for each console
-            // this is to verify positioning
-            _mapConsole.SetBackColor( 0, 0, _mapWidth, _mapHeight, Colors.FloorBackground );
-            _mapConsole.Print( 1, 1, "Map", Colors.TextHeading );
-
-            _messageConsole.SetBackColor( 0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater );
-            _messageConsole.Print( 1, 1, "Messages", Colors.TextHeading );
-
-            _statConsole.SetBackColor( 0, 0, _statWidth, _statHeight, Palette.DbOldStone );
-            _statConsole.Print( 1, 1, "Stats", Colors.TextHeading );
-
-            _inventoryConsole.SetBackColor( 0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood );
-            _inventoryConsole.Print( 1, 1, "Inventory", Colors.TextHeading );
+            //
         }
 
         // event handler for RLNET's Render event
@@ -111,6 +118,9 @@ namespace Game
 
             // draw the generated DungeonMap to the map sub-console
             DungeonMap.Draw( _mapConsole );
+
+            // draw the Player and their FOV onto the map
+            Player.Draw( _mapConsole, DungeonMap );
 
             // tell RLNET to draw the console that we set
             _rootConsole.Draw();
