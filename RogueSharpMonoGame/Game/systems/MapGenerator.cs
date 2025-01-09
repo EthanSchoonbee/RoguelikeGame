@@ -36,7 +36,7 @@ namespace Game.systems
             _map.Initialize(_width, _height);
 
             // try and place as many rooms as the specified maxRooms
-            // NOTE: only using decrementing loop breccias of WordPress formatting
+            // NOTE: only using decrementing loop because of WordPress formatting
             for (int r = _maxRooms; r > 0; r--)
             {
                // determine the size and position of the room randomly
@@ -82,12 +82,12 @@ namespace Game.systems
                 // give a 50% chance to which "L" shaped connecting hallway to tunnel out
                 if (Game.Random.Next(1, 2) == 1)
                 {
-                    CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
+                    CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, previousRoomCenterY);
                     CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, currentRoomCenterX);
                 }
                 else
                 {
-                    CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, currentRoomCenterX);
+                    CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, previousRoomCenterX);
                     CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
                 }
             }
