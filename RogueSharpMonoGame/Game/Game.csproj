@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="core\Colors.cs" />
+    <Compile Include="core\DungeonMap.cs" />
     <Compile Include="core\Palette.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +64,9 @@
     <PackageReference Include="RogueSharp">
       <Version>4.2.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="systems\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
