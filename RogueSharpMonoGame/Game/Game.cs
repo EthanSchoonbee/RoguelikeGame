@@ -8,9 +8,6 @@ namespace Game
 {
     public static class Game
     {
-        // Temporary member variable just to show our MessageLog is working
-        private static int _steps = 0;
-
         // Player
         public static Player Player { get; set; }
 
@@ -103,9 +100,6 @@ namespace Game
             _statConsole = new RLConsole( _statWidth, _statHeight );
             _inventoryConsole = new RLConsole( _inventoryWidth, _inventoryHeight );
 
-            _statConsole.SetBackColor( 0, 0, _statWidth, _statHeight, Palette.DbOldStone );
-            _statConsole.Print( 1, 1, "Stats", Colors.TextHeading );
-
             _inventoryConsole.SetBackColor( 0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood );
             _inventoryConsole.Print( 1, 1, "Inventory", Colors.TextHeading );
 
@@ -157,8 +151,6 @@ namespace Game
 
             if (didPlayerAct)
             {
-                // every time the player acts increment the steps and log it
-                MessageLog.Add($"Step # {++_steps}");
                 _renderRequired = true;
             }
         }
@@ -169,11 +161,14 @@ namespace Game
             // do not render all consoles if nothing has changed
             if (_renderRequired)
             {
-                // draw the generated DungeonMap to the map sub-console
+                // draw the generated DungeonMap onto the map sub-console
                 DungeonMap.Draw( _mapConsole );
 
                 // draw the Player and their FOV onto the map sub-console
                 Player.Draw( _mapConsole, DungeonMap );
+
+                // draw Player Stats onto the stats sub-console
+                Player.DrawStats(_statConsole);
 
                 // draw the MessageLog to the message sub-console
                 MessageLog.Draw(_messageConsole);

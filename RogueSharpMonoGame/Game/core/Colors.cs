@@ -18,7 +18,10 @@ namespace Game.core
         public static RLColor WallFov = Palette.SecondaryLighter;
 
         // specific text color
-        public static RLColor TextHeading = Palette.DbLight;
+        public static RLColor TextHeading = RLColor.White;
+        public static RLColor Text = Palette.DbLight;
+        public static RLColor Health = Palette.DbBlood;
+        public static RLColor Gold = Palette.DbSun;
 
         // specific player color
         public static RLColor Player = Palette.DbLight;
