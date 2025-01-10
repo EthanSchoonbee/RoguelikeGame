@@ -8,24 +8,6 @@ namespace Game
 {
     public static class Game
     {
-        // Player
-        public static Player Player { get; set; }
-
-        // DungeonMap to generate and render
-        public static DungeonMap DungeonMap { get; private set; }
-
-        // check if a rerender is needs (initialise to true on run)
-        private static bool _renderRequired = true;
-
-        // CommandSystem
-        private static CommandSystem CommandSystem { get; set; }
-
-        // MessageLog
-        public static MessageLog MessageLog { get; private set; }
-
-        // singleton of IRandom used throughout rhe game to generate random numbers
-        public static IRandom Random { get; private set; }
-
         // the screen height and width in number of tiles
 
         // screen :
@@ -62,6 +44,24 @@ namespace Game
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
+        // check if a rerender is needs (initialise to true on run)
+        private static bool _renderRequired = true;
+
+        // Player
+        public static Player Player { get; set; }
+
+        // DungeonMap to generate and render
+        public static DungeonMap DungeonMap { get; private set; }
+
+        // MessageLog
+        public static MessageLog MessageLog { get; private set; }
+
+        // CommandSystem
+        private static CommandSystem CommandSystem { get; set; }
+
+        // singleton of IRandom used throughout rhe game to generate random numbers
+        public static IRandom Random { get; private set; }
+
         static void Main(string[] args)
         {
             // establish a seed for the random number generator from the current time
@@ -71,21 +71,11 @@ namespace Game
 
             // exact name of bitmap font file
             string fontFileName = "assets/terminal8x8.png";
+
             // title for console window 
             string consoleTitle = $"RogueSharp V3 - Level 1 - Seed {seed}";
 
-            // instantiate a MapGenerator
-            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight, 20, 13, 7 );
-
-            // use the MapGenerator to create a DungeonMap
-            DungeonMap = mapGenerator.CreateMap();
-
-            // update the FOV of the map based on Player awareness
-            DungeonMap.UpdatePlayerFieldOfView();
-
-            // instantiate a CommandSystem
-            CommandSystem = new CommandSystem();
-
+            // create a new MessageLog and print the random seed used to generate the level
             MessageLog = new MessageLog();
             MessageLog.Add("The rogue arrives on level 1");
             MessageLog.Add($"Level created with seed {seed}");
@@ -100,14 +90,27 @@ namespace Game
             _statConsole = new RLConsole( _statWidth, _statHeight );
             _inventoryConsole = new RLConsole( _inventoryWidth, _inventoryHeight );
 
-            _inventoryConsole.SetBackColor( 0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood );
-            _inventoryConsole.Print( 1, 1, "Inventory", Colors.TextHeading );
+            // instantiate a MapGenerator
+            MapGenerator mapGenerator = new MapGenerator( _mapWidth, _mapHeight, 20, 13, 7 );
+
+            // use the MapGenerator to create a DungeonMap
+            DungeonMap = mapGenerator.CreateMap();
+
+            // update the FOV of the map based on Player awareness
+            DungeonMap.UpdatePlayerFieldOfView();
+
+            // instantiate a CommandSystem
+            CommandSystem = new CommandSystem();
 
             // set up a handler for RLNET's Update event
             _rootConsole.Update += OnRootConsoleUpdate;
 
             // set up a handler for RLNET's Render event
             _rootConsole.Render += OnRootConsoleRender;
+
+            //REMOVE!!!!!!!!!!!!
+            _inventoryConsole.SetBackColor( 0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood );
+            _inventoryConsole.Print( 1, 1, "Inventory", Colors.TextHeading );
 
             // begin RLNET's game loop
             _rootConsole.Run();
@@ -161,8 +164,13 @@ namespace Game
             // do not render all consoles if nothing has changed
             if (_renderRequired)
             {
+                // clear consoles
+                _mapConsole.Clear();
+                _statConsole.Clear();
+                _messageConsole.Clear();
+
                 // draw the generated DungeonMap onto the map sub-console
-                DungeonMap.Draw( _mapConsole );
+                DungeonMap.Draw( _mapConsole, _statConsole );
 
                 // draw the Player and their FOV onto the map sub-console
                 Player.Draw( _mapConsole, DungeonMap );
@@ -174,14 +182,10 @@ namespace Game
                 MessageLog.Draw(_messageConsole);
 
                 // Blit the sub-consoles to the root console in the correct locations
-                RLConsole.Blit( _mapConsole, 0, 0, _mapWidth, _mapHeight,
-                    _rootConsole , 0, _inventoryHeight );
-                RLConsole.Blit( _statConsole, 0, 0, _statWidth, _statHeight,
-                    _rootConsole , _mapWidth, 0 );
-                RLConsole.Blit( _messageConsole, 0, 0, _messageWidth, _messageHeight,
-                    _rootConsole , 0, _screenHeight - _messageHeight );
-                RLConsole.Blit( _inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight,
-                    _rootConsole , 0, 0 );
+                RLConsole.Blit( _mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole , 0, _inventoryHeight );
+                RLConsole.Blit( _statConsole, 0, 0, _statWidth, _statHeight, _rootConsole , _mapWidth, 0 );
+                RLConsole.Blit( _messageConsole, 0, 0, _messageWidth, _messageHeight, _rootConsole , 0, _screenHeight - _messageHeight );
+                RLConsole.Blit( _inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole , 0, 0 );
 
                 // tell RLNET to draw the console that we set
                 _rootConsole.Draw();

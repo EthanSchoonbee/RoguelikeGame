@@ -140,7 +140,7 @@ namespace Game.core
 
         // Draw method to eb called each time the map is updated
         // renders all the symbols/colors for each cell to the map sub-console
-        public void Draw(RLConsole mapConsole)
+        public void Draw(RLConsole mapConsole, RLConsole statConsole)
         {
             // draw each cell onto the map
             foreach (Cell cell in GetAllCells())
@@ -148,10 +148,21 @@ namespace Game.core
                 SetConsoleSymbolForCell( mapConsole, cell ); // set the cell
             }
 
+            // keep an index of which position to draw monster stats at
+            int monsterPositionIndex = 0;
+
             // draw each monster onto the map
             foreach (Monster monster in _monsters)
             {
                 monster.Draw(mapConsole, this);
+
+                // when a monster is in the PLayer's FOV draw their stats
+                if (IsInFov(monster.X, monster.Y))
+                {
+                    // pass the index to DrawStats and increment it afterward
+                    monster.DrawStats(statConsole, monsterPositionIndex);
+                    monsterPositionIndex++;
+                }
             }
         }
 
