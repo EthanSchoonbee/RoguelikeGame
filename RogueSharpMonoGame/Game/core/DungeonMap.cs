@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RLNET;
 using RogueSharp;
 using RogueSharp.MapCreation;
@@ -91,6 +92,22 @@ namespace Game.core
             _monsters.Add(monster);
             // after adding a monster to the map ensure the cell is not walkable
             SetIsWalkable(monster.X, monster.Y, false );
+        }
+
+        // method to remove a monster from the map
+        public void RemoveMonster(Monster monster)
+        {
+            // remove the monster form the list of monsters
+            _monsters.Remove(monster);
+
+            // after removing the monster from the map, make sure the cell is walkable again
+            SetIsWalkable(monster.X, monster.Y, true);
+        }
+
+        // find a monster in the list which has the given X and Y coordinates
+        public Monster GetMonsterAt(int x, int y)
+        {
+            return _monsters.FirstOrDefault(m => m.X == x && m.Y == y);
         }
 
         // helper method for setting the IsWalkable property on the cell
